@@ -1,11 +1,21 @@
+if (Process.platform === 'linux') {
+    libc = 'libc.so';
+} else if (Process.platform === 'darwin') {
+    libc = 'libSystem.B.dylib';
+} else {
+    libc = null;
+}
+
 // Short api declarations
-hook = Interceptor.attach();
+hook = Interceptor.attach;
 
 // Native functions references
-getpeername = new NativeFunction(Module.findExportByName(null, "getpeername"), "int", ["int", "pointer", "pointer"]);
-getsockname = new NativeFunction(Module.findExportByName(null, "getsockname"), "int", ["int", "pointer", "pointer"]);
-ntohs = new NativeFunction(Module.findExportByName(null, "ntohs"), "uint16", ["uint16"]);
-ntohl = new NativeFunction(Module.findExportByName(null, "ntohl"), "uint32", ["uint32"]);
+getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "int", ["int", "pointer", "pointer"]);
+getsockname = new NativeFunction(Module.findExportByName(libc, "getsockname"), "int", ["int", "pointer", "pointer"]);
+ntohs = new NativeFunction(Module.findExportByName(libc, "ntohs"), "uint16", ["uint16"]);
+ntohl = new NativeFunction(Module.findExportByName(libc, "ntohl"), "uint32", ["uint32"]);
+getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "int", ["int", "pointer", "pointer"]);
+getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "int", ["int", "pointer", "pointer"]);
 
 // Extensions
 mapFd = function(fd, read) {
@@ -28,3 +38,7 @@ mapFd = function(fd, read) {
     }
     return message;
 }
+
+setTimeout(function() {
+    %%script%%
+}, %%delay%%)

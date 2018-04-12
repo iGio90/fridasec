@@ -4,7 +4,7 @@ import sys
 
 
 class FridaSec(object):
-    def __init__(self, target, script):
+    def __init__(self, target, script, delay=0):
         device = frida.get_usb_device()
 
         bundle_identifier = None
@@ -35,8 +35,12 @@ class FridaSec(object):
         with codecs.open('./api.js', 'r', 'utf-8') as f:
             source = f.read()
 
-        source += script
+        source = source.replace('%%script%%', script)
+        source = source.replace('%%delay%%', str(delay))
 
-        self._script = process.create_script(source)
+        self.script = process.create_script(source)
         print("[*] All done. Good luck!")
-        self._script.load()
+        self.script.load()
+
+    def get_script(self):
+        return self.script
