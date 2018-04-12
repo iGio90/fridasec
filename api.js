@@ -1,3 +1,5 @@
+var target = '%%targetModule%%';
+
 if (Process.platform === 'linux') {
     libc = 'libc.so';
 } else if (Process.platform === 'darwin') {
@@ -41,6 +43,20 @@ mapFd = function(fd, read) {
     return message;
 }
 
+getPtr = function(adr) {
+    if (target !== null) {
+        return ptr(parseInt(base) + adr);
+    }
+
+    return ptr(adr);
+}
+
 setTimeout(function() {
+    try {
+        target = Process.findModuleByName(target);
+    } catch (err) {
+        target = null;
+    }
+
     %%script%%
 }, %%delay%%)

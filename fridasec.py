@@ -8,7 +8,7 @@ class FridaSec(object):
         self.device = frida.get_usb_device()
         self.script = None
 
-    def re(self, target, script, delay=0):
+    def re(self, target, script, target_module='null', delay=0):
         bundle_identifier = None
         pid = None
         for application in self.device.enumerate_applications():
@@ -37,6 +37,7 @@ class FridaSec(object):
         with codecs.open('./api.js', 'r', 'utf-8') as f:
             source = f.read()
 
+        source = source.replace('%%target%%', target_module)
         source = source.replace('%%script%%', script)
         source = source.replace('%%delay%%', str(delay))
 
