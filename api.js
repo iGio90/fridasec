@@ -8,6 +8,8 @@ if (Process.platform === 'linux') {
 
 // Short api declarations
 hook = Interceptor.attach;
+memRead = Memory.readByteArray;
+memWrite = Memory.writeByteArray;
 
 // Native functions references
 getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "int", ["int", "pointer", "pointer"]);

@@ -4,12 +4,14 @@ import sys
 
 
 class FridaSec(object):
-    def __init__(self, target, script, delay=0):
-        device = frida.get_usb_device()
+    def __init__(self):
+        self.device = frida.get_usb_device()
+        self.script = None
 
+    def re(self, target, script, delay=0):
         bundle_identifier = None
         pid = None
-        for application in device.enumerate_applications():
+        for application in self.device.enumerate_applications():
             if target == application.name:
                 bundle_identifier = application.identifier
                 pid = application.pid
@@ -23,13 +25,13 @@ class FridaSec(object):
         # attach and inject frida script
         print("[*] Attaching to target process")
         if pid == 0:
-            pid = device.spawn([bundle_identifier])
+            pid = self.device.spawn([bundle_identifier])
         else:
             try:
-                device.resume(pid)
+                self.device.resume(pid)
             except:
                 pass
-        process = device.attach(pid)
+        process = self.device.attach(pid)
 
         print("[*] Injecting script")
         with codecs.open('./api.js', 'r', 'utf-8') as f:
