@@ -45,5 +45,11 @@ class FridaSec(object):
         print("[*] All done. Good luck!")
         self.script.load()
 
+    def enumerate_applications(self):
+        return self.enumerate_applications()
+
+    def enumerate_processes(self):
+        return self.device.enumerate_processes()
+
     def get_script(self):
         return self.script

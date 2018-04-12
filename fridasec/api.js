@@ -8,11 +8,6 @@ if (Process.platform === 'linux') {
     libc = null;
 }
 
-// Short api declarations
-hook = Interceptor.attach;
-memRead = Memory.readByteArray;
-memWrite = Memory.writeByteArray;
-
 // Native functions references
 getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "int", ["int", "pointer", "pointer"]);
 getsockname = new NativeFunction(Module.findExportByName(libc, "getsockname"), "int", ["int", "pointer", "pointer"]);
@@ -22,6 +17,18 @@ getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "
 getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "int", ["int", "pointer", "pointer"]);
 
 // Extensions
+backtrace = function() {
+    return Thread.backtrace(this.context, Backtracer.ACCURATE).map(DebugSymbol.fromAddress).join("\n");
+}
+
+getPtr = function(adr) {
+    if (target !== null) {
+        return ptr(parseInt(base) + adr);
+    }
+
+    return ptr(adr);
+}
+
 mapFd = function(fd, read) {
     if (typeof fd !== 'number') {
         fd = parseInt(fd);
@@ -43,13 +50,11 @@ mapFd = function(fd, read) {
     return message;
 }
 
-getPtr = function(adr) {
-    if (target !== null) {
-        return ptr(parseInt(base) + adr);
-    }
-
-    return ptr(adr);
-}
+// Short api declarations
+bt = backtrace;
+hook = Interceptor.attach;
+memRead = Memory.readByteArray;
+memWrite = Memory.writeByteArray;
 
 setTimeout(function() {
     try {
