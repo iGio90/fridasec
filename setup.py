@@ -8,4 +8,4 @@ setup(name='fridasec',
       author_email='',
       license='GPL',
       packages=['fridasec'],
-      zip_safe=False)
+      zip_safe=False, install_requires=['frida'])

@@ -3,19 +3,37 @@ import frida
 import sys
 
 
+class Target(object):
+    def __init__(self, target):
+        self.target = target
+        self.target_module = 'null'
+        self.script = ''
+        self.start_delay = 0
+
+    def set_start_delay(self, delay):
+        self.start_delay = delay
+
+    def set_script(self, script):
+        self.script = script
+
+    def set_target_module(self, target_module):
+        self.target_module = target_module
+
+
 class FridaSec(object):
-    def __init__(self):
+    def __init__(self, target):
+        self.target = target
         self.device = frida.get_usb_device()
         self.script = None
 
-    def re(self, target, script, target_module='null', delay=0):
+    def run(self):
         bundle_identifier = None
         pid = None
         for application in self.device.enumerate_applications():
-            if target == application.name:
+            if self.target.target == application.name:
                 bundle_identifier = application.identifier
                 pid = application.pid
-            elif target == application.identifier:
+            elif self.target.target == application.identifier:
                 bundle_identifier = application.identifier
                 pid = application.pid
         if bundle_identifier is None:
@@ -37,9 +55,9 @@ class FridaSec(object):
         with codecs.open('./api.js', 'r', 'utf-8') as f:
             source = f.read()
 
-        source = source.replace('%%target%%', target_module)
-        source = source.replace('%%script%%', script)
-        source = source.replace('%%delay%%', str(delay))
+        source = source.replace('%%target%%', self.target.target_module)
+        source = source.replace('%%script%%', self.target.script)
+        source = source.replace('%%delay%%', str(self.target.start_delay))
 
         self.script = process.create_script(source)
         print("[*] All done. Good luck!")
