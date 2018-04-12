@@ -13,8 +13,6 @@ getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "
 getsockname = new NativeFunction(Module.findExportByName(libc, "getsockname"), "int", ["int", "pointer", "pointer"]);
 ntohs = new NativeFunction(Module.findExportByName(libc, "ntohs"), "uint16", ["uint16"]);
 ntohl = new NativeFunction(Module.findExportByName(libc, "ntohl"), "uint32", ["uint32"]);
-getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "int", ["int", "pointer", "pointer"]);
-getpeername = new NativeFunction(Module.findExportByName(libc, "getpeername"), "int", ["int", "pointer", "pointer"]);
 
 // Extensions
 backtrace = function() {

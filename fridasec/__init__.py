@@ -7,8 +7,12 @@ class Target(object):
     def __init__(self, target):
         self.target = target
         self.target_module = 'null'
+        self.on_message_cb = None
         self.script = ''
         self.start_delay = 0
+
+    def set_frida_message_callback(self, cb):
+        self.on_message_cb = cb
 
     def set_start_delay(self, delay):
         self.start_delay = delay
@@ -60,6 +64,8 @@ class FridaSec(object):
         source = source.replace('%%delay%%', str(self.target.start_delay))
 
         self.script = process.create_script(source)
+        if self.target.on_message_cb is not None:
+            self.script.on('message', self.target.on_message_cb)
         print("[*] All done. Good luck!")
         self.script.load()
 
