@@ -23,7 +23,7 @@ backtrace = function() {
 
 getPtr = function(adr) {
     if (target !== null) {
-        return ptr(parseInt(base) + adr);
+        return ptr(parseInt(target.base) + adr);
     }
 
     return ptr(adr);
