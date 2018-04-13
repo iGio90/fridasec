@@ -55,6 +55,10 @@ getPtr = function(adr) {
     return ptr(adr);
 }
 
+libcPtr = function(what) {
+    return Module.findExportByName(libc, what);
+}
+
 mapFd = function(fd, read) {
     if (typeof fd !== 'number') {
         fd = parseInt(fd);
@@ -84,6 +88,15 @@ memWrite = Memory.writeByteArray;
 mr = Memory.readByteArray;
 mw = Memory.writeByteArray;
 rp = Memory.readPointer;
+
+// Utils
+objToArr = function(obj) {
+    var ret = [];
+    for (k in obj) {
+        ret.push(obj[k]);
+    }
+    return ret;
+}
 
 setTimeout(function() {
     try {

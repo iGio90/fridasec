@@ -16,6 +16,8 @@ along with this program. If not, see https://www.gnu.org/licenses/
 """
 
 import codecs
+import os
+
 import frida
 import sys
 
@@ -84,10 +86,11 @@ class FridaSec(object):
                 self.device.resume(pid)
             except:
                 pass
+
         process = self.device.attach(pid)
 
         print("[*] Injecting script")
-        with codecs.open('./api.js', 'r', 'utf-8') as f:
+        with codecs.open(os.path.dirname(os.path.abspath(__file__)) + '/api.js', 'r', 'utf-8') as f:
             source = f.read()
 
         source = source.replace('%%target%%', self.target.target_module)
@@ -98,6 +101,7 @@ class FridaSec(object):
         self.script.on('message', self._on_message)
         print("[*] All done. Good luck!")
         self.script.load()
+        sys.stdin.read()
 
     def _on_message(self, message, data):
         if self._handle_message(message, data):
