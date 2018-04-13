@@ -35,7 +35,9 @@ class Target(object):
         self.start_delay = delay
 
     def set_script(self, script):
-        self.script = script
+        with codecs.open(script, 'r', 'utf-8') as f:
+            s = f.read()
+        self.script = s
 
     def set_target_module(self, target_module):
         self.target_module = target_module
@@ -46,6 +48,15 @@ class FridaSec(object):
         self.target = target
         self.device = frida.get_usb_device()
         self.script = None
+
+    def enumerate_applications(self):
+        return self.enumerate_applications()
+
+    def enumerate_processes(self):
+        return self.device.enumerate_processes()
+
+    def get_script(self):
+        return self.script
 
     def run(self):
         bundle_identifier = None
@@ -85,12 +96,3 @@ class FridaSec(object):
             self.script.on('message', self.target.on_message_cb)
         print("[*] All done. Good luck!")
         self.script.load()
-
-    def enumerate_applications(self):
-        return self.enumerate_applications()
-
-    def enumerate_processes(self):
-        return self.device.enumerate_processes()
-
-    def get_script(self):
-        return self.script
