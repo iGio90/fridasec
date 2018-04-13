@@ -36,6 +36,17 @@ backtrace = function() {
     return Thread.backtrace(this.context, Backtracer.ACCURATE).map(DebugSymbol.fromAddress).join("\n");
 }
 
+dump = function(adr, len, fn) {
+    if (!(adr instanceof NativePointer)) {
+        adr = ptr(adr)
+    }
+    var what = Memory.readByteArray(adr, len);
+    send({
+        'fscmd': 'dump',
+        'fn': fn
+    }, what)
+}
+
 getPtr = function(adr) {
     if (target !== null) {
         return ptr(parseInt(target.base) + adr);

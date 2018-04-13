@@ -95,7 +95,27 @@ class FridaSec(object):
         source = source.replace('%%delay%%', str(self.target.start_delay))
 
         self.script = process.create_script(source)
-        if self.target.on_message_cb is not None:
-            self.script.on('message', self.target.on_message_cb)
+        self.script.on('message', self._on_message)
         print("[*] All done. Good luck!")
         self.script.load()
+
+    def _on_message(self, message, data):
+        if self._handle_message(message, data):
+            # just pass. it's handled
+            pass
+        elif self.target.on_message_cb is not None:
+            self.target.on_message_cb(message, data)
+
+    @staticmethod
+    def _handle_message(message, data):
+        if 'payload' in message:
+            p = message['payload']
+            if 'fscmd' in p:
+                cmd = p['fscmd']
+                if cmd == 'dump':
+                    fn = p['fn']
+                    with open(fn, 'wb') as f:
+                        f.write(data)
+                return True
+
+        return False
