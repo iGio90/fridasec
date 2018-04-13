@@ -80,23 +80,32 @@ mapFd = function(fd, read) {
     return message;
 }
 
+// Interceptor attach replacement
+_wrapHookApi = function() {
+    c = this.context;
+    registers = regs = function() {
+        send({
+            'fscmd': 'regs',
+            'c': c
+        })
+    }
+}
+_hook = Interceptor.attach;
+hook = function(what, cb) {
+    _hook(what, function() {
+        _wrapHookApi.call(this);
+        cb.call(this);
+    });
+}
+
 // Short api declarations
 bt = backtrace;
-hook = Interceptor.attach;
+Interceptor.attach = hook;
 memRead = Memory.readByteArray;
 memWrite = Memory.writeByteArray;
 mr = Memory.readByteArray;
 mw = Memory.writeByteArray;
 rp = Memory.readPointer;
-
-// Utils
-objToArr = function(obj) {
-    var ret = [];
-    for (k in obj) {
-        ret.push(obj[k]);
-    }
-    return ret;
-}
 
 setTimeout(function() {
     try {
