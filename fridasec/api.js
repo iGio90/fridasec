@@ -81,6 +81,9 @@ bt = backtrace;
 hook = Interceptor.attach;
 memRead = Memory.readByteArray;
 memWrite = Memory.writeByteArray;
+mr = Memory.readByteArray;
+mw = Memory.writeByteArray;
+rp = Memory.readPointer;
 
 setTimeout(function() {
     try {
