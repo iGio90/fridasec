@@ -1,6 +1,8 @@
+Wrap, shortcut and extends frida api to avoid redundant code on different RE sessions.
+
 ### Setup
 
-```pip3 install git+https://github.com/iGio90/frida-sec```
+```pip3 install git+https://github.com/iGio90/fridasec```
 
 ### API Docs
 

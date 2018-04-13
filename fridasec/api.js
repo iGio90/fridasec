@@ -83,12 +83,7 @@ mapFd = function(fd, read) {
 // Interceptor attach replacement
 _wrapHookApi = function() {
     c = this.context;
-    registers = regs = function() {
-        send({
-            'fscmd': 'regs',
-            'c': c
-        })
-    }
+    registers = regs = c;
 }
 _hook = Interceptor.attach;
 hook = function(what, cb) {
