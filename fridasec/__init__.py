@@ -35,7 +35,10 @@ class Target(object):
         self.start_delay = delay
 
     def set_script(self, script):
-        with codecs.open(script, 'r', 'utf-8') as f:
+        self.script = script
+
+    def set_script_path(self, script_path):
+        with codecs.open(script_path, 'r', 'utf-8') as f:
             s = f.read()
         self.script = s
 
